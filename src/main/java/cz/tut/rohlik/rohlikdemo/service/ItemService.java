@@ -47,12 +47,16 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                                   .orElseThrow(() -> new NotFoundException("Item not found"));
         MAPPER.updateItem(item, updateItemDto);
+        ItemCategory itemCategory = itemCategoryRepository.findById(updateItemDto.getItemCategory())
+                                                          .orElseThrow(() -> new NotFoundException(
+                                                                  "Item category  not found!"));
+        item.setItemCategory(itemCategory);
         Item savedItem = itemRepository.save(item);
         return MAPPER.toItemDto(savedItem);
     }
 
     public ItemDto getItem(String itemId) {
-        Item item = itemRepository.findById(itemId)
+        Item item = itemRepository.findByIdAndDeletedIsFalse(itemId)
                                   .orElseThrow(() -> new NotFoundException("Item not found"));
         return MAPPER.toItemDto(item);
     }

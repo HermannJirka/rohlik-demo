@@ -13,6 +13,5 @@ public class UpdateItemDto {
     BigDecimal price;
     Integer count;
     Boolean deleted;
-    Boolean visibility;
     String itemCategory;
 }

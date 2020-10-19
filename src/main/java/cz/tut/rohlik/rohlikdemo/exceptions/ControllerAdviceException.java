@@ -13,7 +13,7 @@ import java.security.AccessControlException;
 @Log4j2
 public class ControllerAdviceException {
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<CustomError> notFoundException(AccessControlException ex,
+    public ResponseEntity<CustomError> notFoundException(NotFoundException ex,
                                                          HttpServletRequest request) {
         log.warn(ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
