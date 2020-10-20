@@ -9,5 +9,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class UpdateItemCategoryDto {
     @NotNull
-    String name;
+    String categoryName;
+    String description;
 }

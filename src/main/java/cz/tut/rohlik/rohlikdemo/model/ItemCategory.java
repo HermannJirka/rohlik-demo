@@ -33,6 +33,8 @@ public class ItemCategory extends AbstractAuditing {
     @NotBlank
     private String categoryName;
 
+    private String description;
+
     @ToString.Exclude
     @OneToMany(mappedBy = "itemCategory", cascade = CascadeType.REMOVE)
     private List<Item> items;

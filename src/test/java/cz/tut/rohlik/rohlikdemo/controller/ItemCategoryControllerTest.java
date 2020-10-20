@@ -40,7 +40,7 @@ class ItemCategoryControllerTest {
     @Test
     void addItemCategory() throws Exception {
         CreateItemCategoryDto createItemCategoryDto = CreateItemCategoryDto.builder()
-                                                                           .name("tools")
+                                                                           .categoryName("tools")
                                                                            .build();
         mvc.perform(post("/item-category")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -48,13 +48,13 @@ class ItemCategoryControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
            .andDo(print())
            .andExpect(status().isOk())
-           .andExpect(jsonPath("$.name").value("tools"));
+           .andExpect(jsonPath("$.categoryName").value("tools"));
     }
 
     @Test
     void updateItemCategory() throws Exception {
         UpdateItemCategoryDto updateItemCategoryDto = UpdateItemCategoryDto.builder()
-                                                                           .name("test")
+                                                                           .categoryName("test")
                                                                            .build();
         mvc.perform(put("/item-category/itemCat5")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -62,7 +62,7 @@ class ItemCategoryControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
            .andDo(print())
            .andExpect(status().isOk())
-           .andExpect(jsonPath("$.name").value("test"));
+           .andExpect(jsonPath("$.categoryName").value("test"));
     }
 
     @Test
@@ -81,7 +81,7 @@ class ItemCategoryControllerTest {
         mvc.perform(get("/item-category/itemCat4"))
            .andDo(print())
            .andExpect(status().isOk())
-           .andExpect(jsonPath("$.name").value("drugs"));
+           .andExpect(jsonPath("$.categoryName").value("drugs"));
     }
 
     @Test

@@ -7,5 +7,6 @@ import lombok.Value;
 @Builder
 public class ItemCategoryDto {
     String id;
-    String name;
+    String categoryName;
+    String description;
 }
