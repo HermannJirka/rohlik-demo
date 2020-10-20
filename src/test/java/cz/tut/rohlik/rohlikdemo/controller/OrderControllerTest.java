@@ -1,6 +1,5 @@
 package cz.tut.rohlik.rohlikdemo.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.tut.rohlik.rohlikdemo.RohlikDemoApplication;
 import cz.tut.rohlik.rohlikdemo.dto.request.CreateOrderDto;

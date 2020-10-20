@@ -28,7 +28,7 @@ import java.util.List;
 @Entity
 @Table(name = "item")
 @EntityListeners(AuditingEntityListener.class)
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 public class Item extends AbstractAuditing{
     @Id
     @GeneratedValue(generator = "uuid")

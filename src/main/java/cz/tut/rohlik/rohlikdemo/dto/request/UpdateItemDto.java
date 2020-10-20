@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Value
 @Builder
 public class UpdateItemDto {
+    String id;
     String name;
     String description;
     BigDecimal price;

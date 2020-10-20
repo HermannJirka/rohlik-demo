@@ -15,6 +15,7 @@ import cz.tut.rohlik.rohlikdemo.repository.OrderRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -40,6 +41,7 @@ public class OrderService {
         this.itemRepository = itemRepository;
     }
 
+    @Transactional(readOnly = true)
     public OrderDto getOrder(String id) {
         Order order = orderRepository.findByIdAndDeletedIsFalse(id)
                                      .orElseThrow(() -> new NotFoundException("Order not found!"));
@@ -49,6 +51,7 @@ public class OrderService {
         return MAPPER.toOrderDto(order);
     }
 
+    @Transactional
     public OrderDto createOrder(List<CreateOrderDto> createOrderDtos) {
         Order order = new Order();
         order.setStatus(OrderStatus.NEW);
@@ -72,7 +75,6 @@ public class OrderService {
                                           .multiply(BigDecimal.valueOf(createOrderDto.getItemCount())));
             priceSum = priceSum.add(orderItem.getItemPriceSum());
             orderItems.add(orderItem);
-            item.setCount(item.getCount() - createOrderDto.getItemCount());
         }
         order.setItems(orderItems);
         order.setPriceSum(priceSum);
@@ -81,6 +83,7 @@ public class OrderService {
         return MAPPER.toOrderDto(updatedOrder);
     }
 
+    @Transactional
     public OrderDto updateOrderItems(String id, List<UpdateOrderDto> items) {
         Order order = orderRepository.findByIdAndDeletedIsFalse(id)
                                      .orElseThrow(() -> new NotFoundException("Order not found!"));
@@ -102,6 +105,7 @@ public class OrderService {
         return MAPPER.toOrderDto(savedOrder);
     }
 
+    @Transactional
     private BigDecimal updateOrderItems(List<UpdateOrderDto> items,
                                         Order order,
                                         Map<String, OrderItem> orderItemMap,
@@ -145,6 +149,7 @@ public class OrderService {
         }
     }
 
+    @Transactional
     public void completeOrder(String id) {
         Order order = orderRepository.findByIdAndDeletedIsFalse(id)
                                      .orElseThrow(() -> new NotFoundException("Order not found!"));
@@ -176,6 +181,7 @@ public class OrderService {
         return Duration.between(createdAtDate, actualDate);
     }
 
+    @Transactional
     public void cancelOrder(String id) {
         Order order = orderRepository.findByIdAndDeletedIsFalse(id)
                                      .orElseThrow(() -> new NotFoundException("Order not found!"));
@@ -199,6 +205,7 @@ public class OrderService {
         orderRepository.saveAll(orders);
     }
 
+    @Transactional
     public void deleteOrder(String id) {
         Order order = orderRepository.findByIdAndDeletedIsFalse(id)
                                      .orElseThrow(() -> new NotFoundException("Order not found!"));

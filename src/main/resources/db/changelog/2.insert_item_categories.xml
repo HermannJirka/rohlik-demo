@@ -1,0 +1,19 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.7.xsd">
+    <changeSet author="Jiri Hermann" id="01_insert_item_category">
+        <sql>
+            insert into item_category(id, category_name)
+            values ('itemCat1', 'vegetable');
+            insert into item_category(id, category_name)
+            values ('itemCat2', 'meat');
+            insert into item_category(id, category_name)
+            values ('itemCat3', 'fruits');
+            insert into item_category(id, category_name)
+            values ('itemCat4', 'drugs');
+            insert into item_category(id, category_name)
+            values ('itemCat5', 'candies');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,73 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.7.xsd">
+    <changeSet author="Jiri Hermann" id="1.create_order_item_table">
+        <createTable tableName="order_item">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="order_item_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP without time zone"/>
+            <column name="updated_at" type="TIMESTAMP without time zone"/>
+            <column name="count" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_price" type="numeric(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_price_sum" type="numeric(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jiri Hermann" id="1.create_item_category_table">
+        <createTable tableName="item_category">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="item_category_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP without time zone"/>
+            <column name="updated_at" type="TIMESTAMP without time zone"/>
+            <column name="category_name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jiri Hermann" id="1.create_item_table">
+        <createTable tableName="item">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="item_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP without time zone"/>
+            <column name="updated_at" type="TIMESTAMP without time zone"/>
+            <column name="deleted" type="BOOLEAN"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="price" type="numeric(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="count" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_category_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jiri Hermann" id="1.create_order_table">
+        <createTable tableName="order">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="order_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP without time zone"/>
+            <column name="updated_at" type="TIMESTAMP without time zone"/>
+            <column name="price_sum" type="numeric(19, 2)"/>
+            <column name="deleted" type="BOOLEAN"/>
+            <column name="status" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

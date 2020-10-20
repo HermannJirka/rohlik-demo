@@ -1,7 +1,7 @@
 package cz.tut.rohlik.rohlikdemo.service;
 
 import cz.tut.rohlik.rohlikdemo.dto.ItemDto;
-import cz.tut.rohlik.rohlikdemo.dto.PagedListWrapper;
+import cz.tut.rohlik.rohlikdemo.dto.PageableDto;
 import cz.tut.rohlik.rohlikdemo.dto.request.CreateItemDto;
 import cz.tut.rohlik.rohlikdemo.dto.request.UpdateItemDto;
 import cz.tut.rohlik.rohlikdemo.exceptions.NotFoundException;
@@ -13,7 +13,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static cz.tut.rohlik.rohlikdemo.mapper.ItemMapper.MAPPER;
@@ -31,6 +33,7 @@ public class ItemService {
         this.itemCategoryRepository = itemCategoryRepository;
     }
 
+    @Transactional
     public ItemDto addItem(CreateItemDto request) {
         Item item = MAPPER.toItem(request);
 
@@ -43,6 +46,7 @@ public class ItemService {
         return MAPPER.toItemDto(savedItem);
     }
 
+    @Transactional
     public ItemDto updateItem(String itemId, UpdateItemDto updateItemDto) {
         Item item = itemRepository.findById(itemId)
                                   .orElseThrow(() -> new NotFoundException("Item not found"));
@@ -55,12 +59,14 @@ public class ItemService {
         return MAPPER.toItemDto(savedItem);
     }
 
+    @Transactional(readOnly = true)
     public ItemDto getItem(String itemId) {
         Item item = itemRepository.findByIdAndDeletedIsFalse(itemId)
                                   .orElseThrow(() -> new NotFoundException("Item not found"));
         return MAPPER.toItemDto(item);
     }
 
+    @Transactional
     public void deleteItem(String itemId) {
         Item item = itemRepository.findById(itemId)
                                   .orElseThrow(() -> new NotFoundException("Item not found"));
@@ -68,11 +74,19 @@ public class ItemService {
         itemRepository.save(item);
     }
 
-    public PagedListWrapper<ItemDto> getItems(Pageable pageable) {
-        Page<Item> items = itemRepository.findAllAvailableItems(pageable);
-        return new PagedListWrapper<>(
-                items.getTotalElements(),
-                items.stream().map(MAPPER::toItemDto).collect(Collectors.toList())
-        );
+    @Transactional(readOnly = true)
+    public PageableDto<ItemDto> getItems(Pageable pageable) {
+        Page<Item> pageableItems = itemRepository.findAllAvailableItems(pageable);
+
+        List<ItemDto> items =
+                pageableItems.stream().map(MAPPER::toItemDto).collect(Collectors.toList());
+
+        return PageableDto.<ItemDto>builder()
+                .items(items)
+                .page(pageable.getPageNumber())
+                .size(pageable.getPageSize())
+                .totalElements(pageableItems.getTotalElements())
+                .totalPages(pageableItems.getTotalPages())
+                .build();
     }
 }

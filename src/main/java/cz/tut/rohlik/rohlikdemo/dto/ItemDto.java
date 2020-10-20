@@ -1,15 +1,17 @@
 package cz.tut.rohlik.rohlikdemo.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
 import java.math.BigDecimal;
 
-@Data
+@Value
+@Builder
 public class ItemDto {
-    private String id;
-    private String name;
-    private String description;
-    private Integer count;
-    private BigDecimal price;
-    private String itemCategoryId;
+    String id;
+    String name;
+    String description;
+    Integer count;
+    BigDecimal price;
+    String itemCategoryId;
 }

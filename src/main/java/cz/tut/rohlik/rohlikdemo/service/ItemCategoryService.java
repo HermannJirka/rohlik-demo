@@ -7,6 +7,7 @@ import cz.tut.rohlik.rohlikdemo.exceptions.NotFoundException;
 import cz.tut.rohlik.rohlikdemo.model.ItemCategory;
 import cz.tut.rohlik.rohlikdemo.repository.ItemCategoryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,12 +23,14 @@ public class ItemCategoryService {
         this.itemCategoryRepository = itemCategoryRepository;
     }
 
+    @Transactional
     public ItemCategoryDto addItemCategory(CreateItemCategoryDto request) {
         ItemCategory itemCategory = MAPPER.toItemCategory(request);
         ItemCategory savedItemCategory = itemCategoryRepository.save(itemCategory);
         return MAPPER.toItemCategoryDto(savedItemCategory);
     }
 
+    @Transactional
     public ItemCategoryDto updateItemCategory(String itemCategoryId,
                                               UpdateItemCategoryDto updateItemCategoryDto) {
         ItemCategory itemCategory = itemCategoryRepository.findById(itemCategoryId)
@@ -38,6 +41,7 @@ public class ItemCategoryService {
         return MAPPER.toItemCategoryDto(savedItemCategory);
     }
 
+    @Transactional(readOnly = true)
     public ItemCategoryDto getItemCategory(String itemCategoryId) {
         ItemCategory itemCategory = itemCategoryRepository.findById(itemCategoryId)
                                                           .orElseThrow(() -> new NotFoundException(
@@ -45,6 +49,7 @@ public class ItemCategoryService {
         return MAPPER.toItemCategoryDto(itemCategory);
     }
 
+    @Transactional(readOnly = true)
     public List<ItemCategoryDto> getAllItemCategories() {
         return itemCategoryRepository.findAll()
                                      .stream()
@@ -52,6 +57,7 @@ public class ItemCategoryService {
                                      .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteItemCategory(String itemCategoryId) {
         itemCategoryRepository.deleteById(itemCategoryId);
     }

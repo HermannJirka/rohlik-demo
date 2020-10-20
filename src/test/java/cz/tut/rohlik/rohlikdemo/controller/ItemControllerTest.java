@@ -15,12 +15,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,13 +42,13 @@ class ItemControllerTest {
 
     @Test
     public void addItem() throws Exception {
-        CreateItemDto itemDto = new CreateItemDto();
-        itemDto.setCount(2);
-        itemDto.setPrice(BigDecimal.valueOf(35));
-        itemDto.setDeleted(false);
-        itemDto.setDescription("white chocolate");
-        itemDto.setName("chocolate");
-        itemDto.setItemCategory("itemCat5");
+        CreateItemDto itemDto = CreateItemDto.builder()
+        .count(2)
+        .price(BigDecimal.valueOf(35))
+        .description("white chocolate")
+        .name("chocolate")
+        .itemCategory("itemCat5")
+        .build();
         mvc.perform(post("/item")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(mapper.writeValueAsString(itemDto))
@@ -63,13 +64,13 @@ class ItemControllerTest {
 
     @Test
     public void updateItem() throws Exception {
-        CreateItemDto itemDto = new CreateItemDto();
-        itemDto.setCount(2);
-        itemDto.setPrice(BigDecimal.valueOf(35));
-        itemDto.setDeleted(false);
-        itemDto.setDescription("White chocolate");
-        itemDto.setName("chocolate");
-        itemDto.setItemCategory("itemCat5");
+        CreateItemDto itemDto = CreateItemDto.builder()
+        .count(2)
+        .price(BigDecimal.valueOf(35))
+        .description("White chocolate")
+        .name("chocolate")
+        .itemCategory("itemCat5")
+        .build();
         String savedItemDto = mvc.perform(post("/item")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(mapper.writeValueAsString(itemDto))
@@ -122,5 +123,18 @@ class ItemControllerTest {
         mvc.perform(get("/item/item1"))
            .andDo(print())
            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getItemsPaginated() throws Exception {
+        mvc.perform(get("/item")
+                .param("size", "3")
+                .param("page", "1"))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.items", hasSize(3)))
+               .andExpect(jsonPath("$.page").value(0))
+               .andExpect(jsonPath("$.size").value(3))
+               .andExpect(jsonPath("$.totalPages").value(2))
+               .andExpect(jsonPath("$.totalElements").value(4));
     }
 }

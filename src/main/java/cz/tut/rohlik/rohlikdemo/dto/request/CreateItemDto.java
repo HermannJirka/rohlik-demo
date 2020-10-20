@@ -1,15 +1,22 @@
 package cz.tut.rohlik.rohlikdemo.dto.request;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@Data
+@Value
+@Builder
 public class CreateItemDto {
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private Integer count;
-    private Boolean deleted;
-    private String itemCategory;
+    @NotNull
+    String name;
+    @NotNull
+    String description;
+    @NotNull
+    BigDecimal price;
+    @NotNull
+    Integer count;
+    @NotNull
+    String itemCategory;
 }
